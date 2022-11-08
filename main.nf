@@ -2,8 +2,6 @@
 
 nextflow.enable.dsl=2
 
-// This reads samples from r_file.txt but it doesn't carry a path to the actual fastq file. can write the path to r_file.txt
-
 
 // Read sample sheet
 //params.input_folder = "${workflow.launchDir}"
@@ -23,7 +21,7 @@ workflow {
     fq | fastp_se
 
     fastp_se.out.fq_trimmed.collectFile(newLine: true, storeDir: "${params.input_folder}") { ID, fq ->
-      [ "r_file_precursor.txt", "$ID\t$fq"]
+      [ "r_file.txt", "$ID\t${params.ouput_folder}/$fq"]
       }
     
     fastp_se.out.fastp_json.collect() | multi_QC
@@ -37,7 +35,7 @@ workflow {
     fq | fastp_pe
     
     fastp_pe.out.fq_trimmed.collectFile(newLine: true, storeDir: "${params.input_folder}") { ID, fq1, fq2 ->
-      [ "r_file_precursor.txt", "$ID\t$fq1\t$fq2"]
+      [ "r_file.txt", "$ID\t${params.ouput_folder}/$fq1\t${params.ouput_folder}/$fq2"]
       }
     
     fastp_pe.out.fastp_json.collect() | multi_QC
@@ -60,7 +58,7 @@ process fastp_pe {
       tuple val(sampleID), path(fq1), path(fq2) 
 
     output:
-      tuple val(sampleID), path("${sampleID}_R1_trimmed.fq.gz"), path("${sampleID}_R2_trimmed.fq.gz"), emit: fq_trimmed
+      tuple val(sampleID), val("${sampleID}_R1_trimmed.fq.gz"), val("${sampleID}_R2_trimmed.fq.gz"), emit: fq_trimmed
       path "*_fastp.json", emit: fastp_json
       path "*_fastp.html"
 
@@ -87,7 +85,7 @@ process fastp_se {
       tuple val(sampleID), path(fq) 
 
     output:
-      tuple val(sampleID), path("${sampleID}_trimmed.fq.gz"), emit: fq_trimmed
+      tuple val(sampleID), val("${sampleID}_trimmed.fq.gz"), emit: fq_trimmed
       path "*_fastp.json", emit: fastp_json
       path "*_fastp.html"
 
