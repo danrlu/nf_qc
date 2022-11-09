@@ -27,10 +27,10 @@ workflow {
     } else {
 
     fq = Channel.fromFilePairs("${params.input_folder}/*_{1,2}.fq.gz", flat: true)
-    .concat(Channel.fromFilePairs("${params.input_folder}/*_{R1,R2}_*.fq.gz", flat: true))
+    .concat(Channel.fromFilePairs("${params.input_folder}/*_{R1,R2}.fq.gz", flat: true))
     .concat(Channel.fromFilePairs("${params.input_folder}/*_{1P,2P}.fq.gz", flat: true))
     .concat(Channel.fromFilePairs("${params.input_folder}/*_{1,2}.fastq.gz", flat: true))
-    .concat(Channel.fromFilePairs("${params.input_folder}/*_{R1,R2}_*.fastq.gz", flat: true))
+    .concat(Channel.fromFilePairs("${params.input_folder}/*_{R1,R2}.fastq.gz", flat: true))
     .concat(Channel.fromFilePairs("${params.input_folder}/*_{1P,2P}.fastq.gz", flat: true))
 
     fq | fastp_pe
