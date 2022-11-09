@@ -3,8 +3,7 @@
 nextflow.enable.dsl=2
 
 
-params.input_folder = null
-if (params.input_folder == null) error "Please specify --input_folder which contains the fastq files."
+params.input_folder = ${workflow.launchDir}
 
 params.ouput_folder = "${params.input_folder}/trimmed"
 
