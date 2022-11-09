@@ -61,6 +61,7 @@ process fastp_pe {
 
     output:
       tuple val(sampleID), val("${sampleID}_R1_trimmed.fq.gz"), val("${sampleID}_R2_trimmed.fq.gz"), emit: fq_trimmed
+      path "*_trimmed.fq.gz"
       path "*_fastp.json", emit: fastp_json
       path "*_fastp.html"
 
@@ -88,6 +89,7 @@ process fastp_se {
 
     output:
       tuple val(sampleID), val("${sampleID}_trimmed.fq.gz"), emit: fq_trimmed
+      path "*_trimmed.fq.gz"
       path "*_fastp.json", emit: fastp_json
       path "*_fastp.html"
 
