@@ -3,7 +3,7 @@
 nextflow.enable.dsl=2
 
 
-params.input_folder = ${workflow.launchDir}
+params.input_folder = "${workflow.launchDir}"
 
 params.ouput_folder = "${params.input_folder}/trimmed"
 
