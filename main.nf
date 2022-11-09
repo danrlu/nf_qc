@@ -3,9 +3,8 @@
 nextflow.enable.dsl=2
 
 
-// Read sample sheet
-//params.input_folder = "${workflow.launchDir}"
-params.input_folder = "${workflow.launchDir}/data_ena"
+params.input_folder = null
+if (params.input_folder == null) error "Please specify --input_folder which contains the fastq files."
 
 params.ouput_folder = "${params.input_folder}/trimmed"
 
@@ -29,8 +28,11 @@ workflow {
     } else {
 
     fq = Channel.fromFilePairs("${params.input_folder}/*_{1,2}.fq.gz", flat: true)
-    .concat(Channel.fromFilePairs("${params.input_folder}/*_{R1,R2}_*.fastq.gz", flat: true))
+    .concat(Channel.fromFilePairs("${params.input_folder}/*_{R1,R2}_*.fq.gz", flat: true))
     .concat(Channel.fromFilePairs("${params.input_folder}/*_{1P,2P}.fq.gz", flat: true))
+    .concat(Channel.fromFilePairs("${params.input_folder}/*_{1,2}.fastq.gz", flat: true))
+    .concat(Channel.fromFilePairs("${params.input_folder}/*_{R1,R2}_*.fastq.gz", flat: true))
+    .concat(Channel.fromFilePairs("${params.input_folder}/*_{1P,2P}.fastq.gz", flat: true))
 
     fq | fastp_pe
     
